@@ -3,12 +3,12 @@
 	"displayName": "Midi",
 	"description": "Custom Editor API Samples",
 	"version": "0.0.1",
-	"publisher": "vscode-samples",
+	"publisher": "max-norman",
 	"private": true,
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/Microsoft/vscode-extension-samples"
+		"url": ""
 	},
 	"engines": {
 		"vscode": "^1.74.0"
@@ -30,14 +30,8 @@
 					}
 				]
 			}
-		],
-		"commands": [
-			{
-				"command": "catCustoms.pawDraw.new",
-				"title": "Create new Paw Draw Document",
-				"category": "Paw Draw"
-			}
 		]
+		
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
