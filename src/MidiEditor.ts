@@ -399,7 +399,7 @@ export class MidiEditorProvider implements vscode.CustomEditorProvider<MidiDocum
 		const nonce = getNonce();
 		const midi = this.getMidiFromDocument(document);
 		const info_str = midi_to_text(midi);
-		const docuri = document.uri;
+		const docuri = webview.asWebviewUri(document.uri);
 		console.log(info_str);
 		return /* html */`
 			<!DOCTYPE html>
@@ -407,11 +407,8 @@ export class MidiEditorProvider implements vscode.CustomEditorProvider<MidiDocum
 			<head>
 				<meta charset="UTF-8">
 
-				<!--
-				Use a content security policy to only allow loading images from https or from our extension directory,
-				and only allow scripts that have a specific nonce.
-				-->
-				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${webview.cspSource} blob:; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';">
+				
+				
 
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -426,7 +423,7 @@ export class MidiEditorProvider implements vscode.CustomEditorProvider<MidiDocum
 			<pre id ="info">${info_str}</pre>
 			<p><a href="https://surikov.github.io/webaudiofont/">source</a></p>
 			<script nonce="${nonce}" src="${scriptUri}"></script>
-			<script>read</script>
+			<script nonce = "${nonce}" >handleExample("${docuri}")</script>
 			</body>
 			</html>`;
 	}
