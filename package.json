@@ -20,7 +20,6 @@
 	"main": "./out/extension.js",
 	"contributes": {
 		"customEditors": [
-			
 			{
 				"viewType": "catCustoms.pawDraw",
 				"displayName": "Midi",
@@ -31,7 +30,6 @@
 				]
 			}
 		]
-		
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
@@ -49,6 +47,7 @@
 		"typescript-eslint": "^8.16.0"
 	},
 	"dependencies": {
-		"@tonejs/midi": "^2.0.28"
+		"@tonejs/midi": "^2.0.28",
+		"@vscode-elements/elements": "^1.9.0"
 	}
 }

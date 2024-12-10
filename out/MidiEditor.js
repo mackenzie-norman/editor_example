@@ -311,8 +311,9 @@ class MidiEditorProvider {
         const midiScriptUri = webview.asWebviewUri(midiScriptPathOnDisk);
         // Use a nonce to whitelist which scripts can be run
         const nonce = (0, util_1.getNonce)();
-        const midi = this.getMidiFromDocument(document);
-        const info_str = midi_to_text(midi);
+        //const midi = this.getMidiFromDocument(document);
+        //const info_str = midi_to_text(midi);
+        const info_str = "WIP";
         const docuri = webview.asWebviewUri(document.uri);
         console.log(info_str);
         return /* html */ `
@@ -325,16 +326,16 @@ class MidiEditorProvider {
 				
 
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+				
 				<link href="${styleVSCodeUri}" rel="stylesheet" />
 				<script src='https://surikov.github.io/webaudiofont/npm/dist/WebAudioFontPlayer.js'></script>
 				<script nonce="${nonce}" src="${midiScriptUri}"></script>
 				<title>Paw Draw</title>
 			</head>
 			<body>
-			<div id='cntls'>
+			<div id='cntls'></div>
 			<hr />
-			<pre id ="info">${info_str}</pre>
+			<div id ="info" ></div>
 			<p><a href="https://surikov.github.io/webaudiofont/">source</a></p>
 			<script nonce="${nonce}" src="${scriptUri}"></script>
 			<script nonce = "${nonce}" >handleExample("${docuri}")</script>

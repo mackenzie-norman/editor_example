@@ -9,11 +9,13 @@ var currentSongTime = 0;
 var nextStepTime = 0;
 var nextPositionTime = 0;
 var loadedsong = null;
+var should_play = true;
 function go() {
 	document.getElementById('tmr').innerHTML = 'starting...';
 	try {
 		startPlay(loadedsong);
-		document.getElementById('tmr').innerHTML = 'playing...';
+		//document.getElementById('tmr').innerHTML = 'playing...';
+		document.getElementById('tmr').innerHTML = `<button onclick="stopSong();">Pause</button>`;
 	} catch (expt) {
 		document.getElementById('tmr').innerHTML = 'error ' + expt;
 	}
@@ -23,7 +25,13 @@ function startPlay(song) {
 	songStart = audioContext.currentTime;
 	nextStepTime = audioContext.currentTime;
 	var stepDuration = 44 / 1000;
+	should_play = true;
 	tick(song, stepDuration);
+}
+function stopSong(){
+	document.getElementById('tmr').innerHTML = `<button onclick="go();">Play</button>`;
+	should_play = false;
+	//window.requestAnimationFrame(null);
 }
 function tick(song, stepDuration) {
 	if (audioContext.currentTime > nextStepTime - stepDuration) {
@@ -39,12 +47,14 @@ function tick(song, stepDuration) {
 	if (nextPositionTime < audioContext.currentTime) {
 		var o = document.getElementById('position');
 		o.value = 100 * currentSongTime / song.duration;
-		document.getElementById('tmr').innerHTML = '' + Math.round(100 * currentSongTime / song.duration) + '%';
+		//document.getElementById('tmr').innerHTML = '' + Math.round(100 * currentSongTime / song.duration) + '%';
 		nextPositionTime = audioContext.currentTime + 3;
 	}
-	window.requestAnimationFrame(function (t) {
-		tick(song, stepDuration);
-	});
+	if (should_play){
+		window.requestAnimationFrame(function (t) {
+			tick(song, stepDuration);
+		});
+	}
 }
 function sendNotes(song, songStart, start, end, audioContext, input, player) {
 	for (var t = 0; t < song.tracks.length; t++) {
@@ -123,7 +133,7 @@ function resetEqlualizer(){
 function buildControls(song) {
 	audioContext.resume();
 	var o = document.getElementById('cntls');
-	var html = '<h2 id="wrng">Refresh browser page to load another song</h2>';
+	var html = '';
 	html = html + '<p id="tmr"><button onclick="go();">Play</button></p>';
 	html = html + '<p><input id="position" type="range" min="0" max="100" value="0" step="1" /></p>';
 	html = html + '<h3>Channels</h3>';
@@ -249,6 +259,8 @@ function handleExample(path) {
 		var arrayBuffer = xmlHttpRequest.response;
 		var midiFile = new MIDIFile(arrayBuffer);
 		var song = midiFile.parseSong();
+		console.log(JSON.stringify(song,null,2));
+		document.getElementById('info').innerHTML =` <pre> ${JSON.stringify(song,null,2)}</pre>`;
 		startLoad(song);
 	};
 	xmlHttpRequest.send(null);
@@ -266,4 +278,3 @@ function handleFileInput(file) {
 	};
 	fileReader.readAsArrayBuffer(file);
 }
-document.getElementById('filesinput').addEventListener('change', handleFileSelect, false);
