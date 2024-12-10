@@ -303,10 +303,17 @@ class MidiEditorProvider {
     getHtmlForWebview(webview, document) {
         // Local path to script and css for the webview
         const styleVSCodeUri = webview.asWebviewUri(vscode.Uri.joinPath(this._context.extensionUri, 'media', 'vscode.css'));
+        const scriptPathOnDisk = vscode.Uri.joinPath(this._context.extensionUri, 'media', 'midi_player.js');
+        // And the uri we use to load this script in the webview
+        const scriptUri = webview.asWebviewUri(scriptPathOnDisk);
+        const midiScriptPathOnDisk = vscode.Uri.joinPath(this._context.extensionUri, 'media', 'MIDIFile.js');
+        // And the uri we use to load this script in the webview
+        const midiScriptUri = webview.asWebviewUri(midiScriptPathOnDisk);
         // Use a nonce to whitelist which scripts can be run
         const nonce = (0, util_1.getNonce)();
         const midi = this.getMidiFromDocument(document);
         const info_str = midi_to_text(midi);
+        const docuri = document.uri;
         console.log(info_str);
         return /* html */ `
 			<!DOCTYPE html>
@@ -323,13 +330,17 @@ class MidiEditorProvider {
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 				<link href="${styleVSCodeUri}" rel="stylesheet" />
-
+				<script src='https://surikov.github.io/webaudiofont/npm/dist/WebAudioFontPlayer.js'></script>
+				<script nonce="${nonce}" src="${midiScriptUri}"></script>
 				<title>Paw Draw</title>
 			</head>
 			<body>
-			<pre id ="info">${info_str}</pre
-			>
-			<script></script>
+			<div id='cntls'>
+			<hr />
+			<pre id ="info">${info_str}</pre>
+			<p><a href="https://surikov.github.io/webaudiofont/">source</a></p>
+			<script nonce="${nonce}" src="${scriptUri}"></script>
+			<script>read</script>
 			</body>
 			</html>`;
     }
@@ -358,6 +369,7 @@ class MidiEditorProvider {
 }
 exports.MidiEditorProvider = MidiEditorProvider;
 MidiEditorProvider.newPawDrawFileId = 1;
+//TODO change
 MidiEditorProvider.viewType = 'catCustoms.pawDraw';
 /**
  * Tracks all webviews.
