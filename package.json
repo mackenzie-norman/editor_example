@@ -1,14 +1,14 @@
 {
 	"name": "cat-customs",
 	"displayName": "Midi",
-	"description": "Custom Editor API Samples",
+	"description": "Play midi files in vscode ",
 	"version": "0.0.1",
 	"publisher": "max-norman",
 	"private": true,
 	"license": "MIT",
 	"repository": {
 		"type": "git",
-		"url": ""
+		"url": "https://github.com/mackenzie-norman/editor_example"
 	},
 	"engines": {
 		"vscode": "^1.74.0"

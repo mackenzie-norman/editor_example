@@ -343,9 +343,6 @@ class MidiEditorProvider {
     }
     onMessage(document, message) {
         switch (message.type) {
-            case 'stroke':
-                document.makeEdit(message);
-                return;
             case 'response':
                 {
                     const callback = this._callbacks.get(message.requestId);

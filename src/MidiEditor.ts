@@ -37,12 +37,11 @@ function midi_to_text(midi:Midi): string {
 	return  JSON.stringify(json_version, null, 2);
 }
 
-interface PawDrawEdit {
-	readonly color: string;
-	readonly stroke: ReadonlyArray<[number, number]>;
+interface MidiJSON_Edit {
+	readonly change: string;
 }
 
-interface PawDrawDocumentDelegate {
+interface MidiDocumentDelegate {
 	getFileData(): Promise<Uint8Array>;
 }
 
@@ -54,7 +53,7 @@ class MidiDocument extends Disposable implements vscode.CustomDocument {
 	static async create(
 		uri: vscode.Uri,
 		backupId: string | undefined,
-		delegate: PawDrawDocumentDelegate,
+		delegate: MidiDocumentDelegate,
 	): Promise<MidiDocument | PromiseLike<MidiDocument>> {
 		// If we have a backup, read that. Otherwise read the resource from the workspace
 		const dataFile = typeof backupId === 'string' ? vscode.Uri.parse(backupId) : uri;
@@ -72,15 +71,15 @@ class MidiDocument extends Disposable implements vscode.CustomDocument {
 	private readonly _uri: vscode.Uri;
 
 	private _documentData: Uint8Array;
-	private _edits: PawDrawEdit[] = [];
-	private _savedEdits: PawDrawEdit[] = [];
+	private _edits: MidiJSON_Edit[] = [];
+	private _savedEdits: MidiJSON_Edit[] = [];
 
-	private readonly _delegate: PawDrawDocumentDelegate;
+	private readonly _delegate: MidiDocumentDelegate;
 
 	private constructor(
 		uri: vscode.Uri,
 		initialContent: Uint8Array,
-		delegate: PawDrawDocumentDelegate
+		delegate: MidiDocumentDelegate
 	) {
 		super();
 		this._uri = uri;
@@ -100,7 +99,7 @@ class MidiDocument extends Disposable implements vscode.CustomDocument {
 
 	private readonly _onDidChangeDocument = this._register(new vscode.EventEmitter<{
 		readonly content?: Uint8Array;
-		readonly edits: readonly PawDrawEdit[];
+		readonly edits: readonly MidiJSON_Edit[];
 	}>());
 	/**
 	 * Fired to notify webviews that the document has changed.
@@ -134,7 +133,7 @@ class MidiDocument extends Disposable implements vscode.CustomDocument {
 	 *
 	 * This fires an event to notify VS Code that the document has been edited.
 	 */
-	makeEdit(edit: PawDrawEdit) {
+	makeEdit(edit: MidiJSON_Edit) {
 		this._edits.push(edit);
 
 		this._onDidChange.fire({
@@ -433,9 +432,6 @@ export class MidiEditorProvider implements vscode.CustomEditorProvider<MidiDocum
 
 	private onMessage(document: MidiDocument, message: any) {
 		switch (message.type) {
-			case 'stroke':
-				document.makeEdit(message as PawDrawEdit);
-				return;
 
 			case 'response':
 				{
