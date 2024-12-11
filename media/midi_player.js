@@ -15,10 +15,21 @@ function go() {
 	try {
 		startPlay(loadedsong);
 		//document.getElementById('tmr').innerHTML = 'playing...';
-		document.getElementById('tmr').innerHTML = `<button onclick="stopSong();">Pause</button>`;
+		document.getElementById('tmr').innerHTML = `<button  onclick="pauseSong();"><span class="icon">⏸</span></button>`;
 	} catch (expt) {
 		document.getElementById('tmr').innerHTML = 'error ' + expt;
 	}
+}
+//this is different than go in that it just picks up where we stopped
+function play()
+{
+	document.getElementById('tmr').innerHTML = `<button  onclick="pauseSong();">⏸</button>`;
+	should_play = true;
+	songStart = currentSongTime;
+	nextStepTime = currentSongTime;
+	var stepDuration = 44 / 1000;
+	tick(loadedsong, stepDuration);
+
 }
 function startPlay(song) {
 	currentSongTime = 0;
@@ -28,8 +39,13 @@ function startPlay(song) {
 	should_play = true;
 	tick(song, stepDuration);
 }
+function pauseSong(){
+	document.getElementById('tmr').innerHTML = `<button onclick="play();"><span class="icon">▶</span></button>`;
+	should_play = false;
+	//window.requestAnimationFrame(null);
+}
 function stopSong(){
-	document.getElementById('tmr').innerHTML = `<button onclick="go();">Play</button>`;
+	document.getElementById('tmr').innerHTML = `<button onclick="go();"><span class="icon">▶</span></button>`;
 	should_play = false;
 	//window.requestAnimationFrame(null);
 }
@@ -134,7 +150,26 @@ function buildControls(song) {
 	audioContext.resume();
 	var o = document.getElementById('cntls');
 	var html = '';
-	html = html + '<p id="tmr"><button onclick="go();">Play</button></p>';
+	html += `<div class="media-controls">
+  <button  id="skip-back" style = "width: 25%;">
+    <span class="icon">⏮</span> 
+  </button>
+  <div id = "tmr" style = "width: 40%;">
+  <button id="play" onclick="go();">
+    <span class="icon">▶</span> 
+  </button>
+  </div>
+  <button  id="skip-forward" style = "width: 25%;">
+    <span class="icon">⏭</span> 
+  </button>
+  <div>
+  <button  id="stop" onclick="stopSong();">
+    <span class="icon">&#x23F9;</span> 
+  </button>
+  </div>
+</div>
+`;
+	
 	html = html + '<p><input id="position" type="range" min="0" max="100" value="0" step="1" /></p>';
 	html = html + '<h3>Channels</h3>';
 	for (var i = 0; i < song.tracks.length; i++) {

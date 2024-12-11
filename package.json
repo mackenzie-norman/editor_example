@@ -1,6 +1,6 @@
 {
-	"name": "cat-customs",
-	"displayName": "Midi",
+	"name": "midi-viewer",
+	"displayName": "Midi Viewer",
 	"description": "Play midi files in vscode ",
 	"version": "0.0.1",
 	"publisher": "max-norman",

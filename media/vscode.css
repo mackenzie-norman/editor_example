@@ -97,3 +97,21 @@ input::placeholder,
 textarea::placeholder {
 	color: var(--vscode-input-placeholderForeground);
 }
+
+
+
+.media-controls {
+display: flex;
+justify-content: space-between;
+align-items: center;
+width: 50%;
+margin: 0 auto;
+gap: 10px;
+}
+
+
+.icon {
+display: inline-block;
+font-size: 16px;
+vertical-align: middle;
+}
