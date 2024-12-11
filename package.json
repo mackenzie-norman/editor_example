@@ -21,7 +21,7 @@
 	"contributes": {
 		"customEditors": [
 			{
-				"viewType": "catCustoms.pawDraw",
+				"viewType": "midiEditor.midi",
 				"displayName": "Midi",
 				"selector": [
 					{

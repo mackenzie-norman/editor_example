@@ -224,21 +224,9 @@ class MidiDocument extends Disposable implements vscode.CustomDocument {
  */
 export class MidiEditorProvider implements vscode.CustomEditorProvider<MidiDocument> {
 
-	private static newPawDrawFileId = 1;
 
 	public static register(context: vscode.ExtensionContext): vscode.Disposable {
-		vscode.commands.registerCommand('catCustoms.pawDraw.new', () => {
-			const workspaceFolders = vscode.workspace.workspaceFolders;
-			if (!workspaceFolders) {
-				vscode.window.showErrorMessage("Creating new Paw Draw files currently requires opening a workspace");
-				return;
-			}
-
-			const uri = vscode.Uri.joinPath(workspaceFolders[0].uri, `new-${MidiEditorProvider.newPawDrawFileId++}.pawdraw`)
-				.with({ scheme: 'untitled' });
-
-			vscode.commands.executeCommand('vscode.openWith', uri, MidiEditorProvider.viewType);
-		});
+		
 
 		return vscode.window.registerCustomEditorProvider(
 			MidiEditorProvider.viewType,
@@ -254,7 +242,7 @@ export class MidiEditorProvider implements vscode.CustomEditorProvider<MidiDocum
 			});
 	}
 	//TODO change
-	private static readonly viewType = 'catCustoms.pawDraw';
+	private static readonly viewType = 'midiEditor.midi';
 
 	/**
 	 * Tracks all known webviews
@@ -416,7 +404,7 @@ export class MidiEditorProvider implements vscode.CustomEditorProvider<MidiDocum
 				<link href="${styleVSCodeUri}" rel="stylesheet" />
 				<script src='https://surikov.github.io/webaudiofont/npm/dist/WebAudioFontPlayer.js'></script>
 				<script nonce="${nonce}" src="${midiScriptUri}"></script>
-				<title>Paw Draw</title>
+				<title>Midi Editor</title>
 			</head>
 			<body>
 			<div id='cntls'></div>

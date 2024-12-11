@@ -179,16 +179,6 @@ class MidiDocument extends dispose_1.Disposable {
  */
 class MidiEditorProvider {
     static register(context) {
-        vscode.commands.registerCommand('catCustoms.pawDraw.new', () => {
-            const workspaceFolders = vscode.workspace.workspaceFolders;
-            if (!workspaceFolders) {
-                vscode.window.showErrorMessage("Creating new Paw Draw files currently requires opening a workspace");
-                return;
-            }
-            const uri = vscode.Uri.joinPath(workspaceFolders[0].uri, `new-${MidiEditorProvider.newPawDrawFileId++}.pawdraw`)
-                .with({ scheme: 'untitled' });
-            vscode.commands.executeCommand('vscode.openWith', uri, MidiEditorProvider.viewType);
-        });
         return vscode.window.registerCustomEditorProvider(MidiEditorProvider.viewType, new MidiEditorProvider(context), {
             // For this demo extension, we enable `retainContextWhenHidden` which keeps the
             // webview alive even when it is not visible. You should avoid using this setting
@@ -330,7 +320,7 @@ class MidiEditorProvider {
 				<link href="${styleVSCodeUri}" rel="stylesheet" />
 				<script src='https://surikov.github.io/webaudiofont/npm/dist/WebAudioFontPlayer.js'></script>
 				<script nonce="${nonce}" src="${midiScriptUri}"></script>
-				<title>Paw Draw</title>
+				<title>Midi Editor</title>
 			</head>
 			<body>
 			<div id='cntls'></div>
@@ -366,9 +356,8 @@ class MidiEditorProvider {
     }
 }
 exports.MidiEditorProvider = MidiEditorProvider;
-MidiEditorProvider.newPawDrawFileId = 1;
 //TODO change
-MidiEditorProvider.viewType = 'catCustoms.pawDraw';
+MidiEditorProvider.viewType = 'midiEditor.midi';
 /**
  * Tracks all webviews.
  */
